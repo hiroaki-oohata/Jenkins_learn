@@ -8,16 +8,18 @@ pipeline {
     // 処理を「ステージ」として段階的に定義する。ビルド結果はステージごとに視覚化される
     stages {
 
-        // ステージ: build として定義
+        // ステージ: clone として定義
         stage('clone') {
             // ステージごとに実施する処理をsteps内に定義。stepsは1つだけ
             steps {
                 print 'クローンを開始します'
-                script {
-                    sh "pwd"
-                    sh "ls -l"
-                    sh "if [ ! -e Jenkins_learn ]; then git clone https://github.com/hiroaki-oohata/Jenkins_learn.git; else git -C ./Jenkins_learn pull; fi"
-                }
+                // \var\lib\jenkins\workspace\xxxxxxx にクローンされます
+                // すでにプロジェクトがある場合は git pull が実行されます
+                sh """
+                    pwd
+                    ls -l
+                    if [ ! -e Jenkins_learn ]; then git clone https://github.com/hiroaki-oohata/Jenkins_learn.git; else git -C ./Jenkins_learn pull; fi
+                """
                 print 'クローンが正常終了しました'
             }
         }
